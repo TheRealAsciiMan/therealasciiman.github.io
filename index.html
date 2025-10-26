@@ -410,6 +410,18 @@
                   "Arme automatique → A2-1",
                   CSI["A2-1"]
                );
+
+            if (
+               data.type === "Épaule" &&
+               data.systeme === "Semi-automatique" &&
+               data.crosse_pliable &&
+               data.longueur_min < 60
+            )
+               return afficherResultat(
+                  "A1-12",
+                  "Épaule semi-auto crosse pliable <60cm → A1-12",
+                  CSI["A1-12"]
+               );
             if (
                data.systeme === "Semi-automatique" &&
                data.type === "Épaule" &&
@@ -455,17 +467,6 @@
                   "A1-11",
                   "Arme automatique transformée → A1-11",
                   CSI["A1-11"]
-               );
-            if (
-               data.type === "Épaule" &&
-               data.systeme === "Semi-automatique" &&
-               data.crosse_pliable &&
-               data.longueur_min < 60
-            )
-               return afficherResultat(
-                  "A1-12",
-                  "Épaule semi-auto crosse pliable <60cm → A1-12",
-                  CSI["A1-12"]
                );
 
             if (data.type === "Poing")
