@@ -487,6 +487,13 @@
                   CSI["B-1"]
                );
 
+            if (CALIBRES_B4.includes(data.calibre))
+               return afficherResultat(
+                  "B-4",
+                  `Chambrée dans un calibre de guerre (${data.calibre}) → B-4`,
+                  CSI["B-4"]
+               );
+
             if (
                data.type === "Épaule" &&
                data.systeme === "Semi-automatique" &&
@@ -511,6 +518,35 @@
                   CSI["B-2abis"]
                );
 
+
+            if (data.longueur_min <= 80 || data.longueur_canon <= 45)
+               return afficherResultat(
+                  "B-2c",
+                  "Longueur minimale ≤80cm ou canon ≤45cm → B-2c",
+                  CSI["B-2c"]
+               );
+
+            if (data.type === "Épaule" && data.systeme === "Pompe") {
+               if (data.canon === "Lisse")
+                  return afficherResultat(
+                     "B-2f",
+                     "Arme à pompe à canon lisse → B-2f",
+                     CSI["B-2f"]
+                  );
+               if (CALIBRES_LISSES.includes(data.calibre))
+                  if (
+                     data.capacite > 5 ||
+                     data.longueur_min <= 80 ||
+                     data.longueur_canon <= 60 ||
+                     data.crosse_pliable
+                  )
+                     return afficherResultat(
+                        "B-2f",
+                        "Arme à pompe à canon rayé calibre lisse >5 coups ou longueur ≤80cm ou canon ≤60cm ou crosse pliable → B-2f",
+                        CSI["B-2f"]
+                     );
+            }
+
             if (
                data.type === "Épaule" &&
                ["Verrou", "Pompe", "Levier de sous-garde", "Linéaire", "Déverrouillage de culasse par bouton"].includes(
@@ -522,13 +558,6 @@
                   "B-2b",
                   "Épaule manuelle >11 coups → B-2b",
                   CSI["B-2b"]
-               );
-
-            if (data.longueur_min <= 80 || data.longueur_canon <= 45)
-               return afficherResultat(
-                  "B-2c",
-                  "Longueur minimale ≤80cm ou canon ≤45cm → B-2c",
-                  CSI["B-2c"]
                );
 
             if (
@@ -554,33 +583,7 @@
                   CSI["B-2e"]
                );
 
-            if (data.type === "Épaule" && data.systeme === "Pompe") {
-               if (data.canon === "Lisse")
-                  return afficherResultat(
-                     "B-2f",
-                     "Arme à pompe à canon lisse → B-2f",
-                     CSI["B-2f"]
-                  );
-               if (CALIBRES_LISSES.includes(data.calibre))
-                  if (
-                     data.capacite > 5 ||
-                     data.longueur_min <= 80 ||
-                     data.longueur_canon <= 60 ||
-                     data.crosse_pliable
-                  )
-                     return afficherResultat(
-                        "B-2f",
-                        "Arme à pompe à canon rayé calibre lisse >5 coups ou longueur ≤80cm ou canon ≤60cm ou crosse pliable → B-2f",
-                        CSI["B-2f"]
-                     );
-            }
 
-            if (CALIBRES_B4.includes(data.calibre))
-               return afficherResultat(
-                  "B-4",
-                  `Chambrée dans un calibre de guerre (${data.calibre}) → B-4`,
-                  CSI["B-4"]
-               );
 
             if (
                data.type === "Épaule" &&
