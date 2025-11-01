@@ -557,11 +557,12 @@
                   if (
                      data.capacite > 5 ||
                      data.longueur_min <= 80 ||
-                     data.longueur_canon <= 60
+                     data.longueur_canon <= 60 ||
+                     data.crosse_pliable
                   )
                      return afficherResultat(
                         "B-2f",
-                        "Arme à pompe à canon rayé calibre lisse >5 coups ou longueur ≤80cm ou canon ≤60cm → B-2f",
+                        "Arme à pompe à canon rayé calibre lisse >5 coups ou longueur ≤80cm ou canon ≤60cm ou crosse pliable → B-2f",
                         CSI["B-2f"]
                      );
             }
