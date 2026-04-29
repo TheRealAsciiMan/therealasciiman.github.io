@@ -1,0 +1,98 @@
+body {
+  font-family: Inter, sans-serif;
+  margin: 0;
+  transition: 0.3s;
+}
+
+/* NAVBAR */
+.navbar {
+  background: #111;
+  color: white;
+}
+
+/* MAIN */
+.main-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 15px;
+}
+
+/* CARD */
+.card {
+  border-radius: 14px;
+  border: none;
+  background: #fff;
+}
+
+/* IMAGE */
+.weapon-img {
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  border-radius: 12px;
+  padding: 10px;
+  border: 2px solid #000; /* light mode */
+}
+
+/* FILTERS */
+.filter-group {
+  margin-bottom: 15px;
+}
+
+.filter-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.filter-btn {
+  margin: 3px;
+}
+
+.filter-btn.active {
+  background: #0d6efd;
+  color: white;
+}
+
+/* FIXED BUTTONS */
+.controls-fixed {
+  position: fixed;
+  top: 70px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1000;
+}
+
+/* ---------------- DARK MODE ---------------- */
+
+html[data-theme="dark"] body {
+  background: #000;
+  color: #eee;
+}
+
+html[data-theme="dark"] .card {
+  background: #1a1a1a; /* ✅ PLUS CLAIR */
+  color: #eee;
+}
+
+html[data-theme="dark"] .navbar {
+  background: #000;
+}
+
+/* texte */
+html[data-theme="dark"] * {
+  color: #eee !important;
+}
+
+/* inputs */
+html[data-theme="dark"] input {
+  background: #111;
+  color: #eee;
+  border: 1px solid #333;
+}
+
+/* image border blanc */
+html[data-theme="dark"] .weapon-img {
+  border: 2px solid #fff;
+}
