@@ -196,3 +196,12 @@ document.getElementById("themeToggle")?.addEventListener("click", () => {
   const dark = html.getAttribute("data-theme") === "dark";
   html.setAttribute("data-theme", dark ? "light" : "dark");
 });
+
+
+// ---- Service
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js")
+    .then(() => console.log("✅ Service Worker registered"))
+    .catch(err => console.log("❌ SW error:", err));
+}
