@@ -17,7 +17,7 @@ fetch("weapons_normalized.json")
     buildFilters(data);
   });
 
-// ---------------- BUILD FILTERS FIX CLICK
+// ---------------- BUILD FILTERS
 function buildFilters(data) {
 
   const container = document.getElementById("filters-container");
@@ -32,9 +32,9 @@ function buildFilters(data) {
       if (!val) return;
 
       val.split("|").forEach(v => {
-        v = v.trim();
-        if (!v) return;
-        stats[v] = (stats[v] || 0) + 1;
+        const clean = v.trim();
+        if (!clean) return;
+        stats[clean] = (stats[clean] || 0) + 1;
       });
     });
 
@@ -42,18 +42,21 @@ function buildFilters(data) {
       .sort((a, b) => b[1] - a[1]);
 
     const group = document.createElement("div");
-    group.className = "filter-group";
-    group.dataset.key = key;
+    group.className = "filter-group mb-3";
+    group.dataset.key = key; // 🔥 IMPORTANT FIX
 
-    group.innerHTML = `<div class="filter-title">${key}</div>`;
+    group.innerHTML = `<div class="filter-title fw-bold mb-2">${key}</div>`;
 
     sorted.forEach(([val, count]) => {
 
       const btn = document.createElement("button");
-      btn.className = "btn btn-outline-primary btn-sm filter-btn";
+      btn.className = "btn btn-outline-primary btn-sm filter-btn m-1";
       btn.textContent = `${val} (${count})`;
 
-      // ✅ FIX: toggle pur (aucune contrainte)
+      // 🔥 FIX IMPORTANT : données internes
+      btn.dataset.value = val.toLowerCase();
+      btn.dataset.key = key;
+
       btn.onclick = () => {
         btn.classList.toggle("active");
       };
@@ -88,8 +91,7 @@ function yearOverlap(r, min, max) {
   return r.end >= min && r.start <= max;
 }
 
-
-// RESET FILTERS
+// ---------------- RESET
 function resetFilters() {
 
   document.querySelectorAll(".filter-btn").forEach(btn => {
@@ -108,27 +110,29 @@ function startGame() {
 
   filteredWeapons = weapons.filter(w => {
 
-    // FILTER BUTTONS
+    const specs = w.specs || {};
+
+    // 🔥 FIX : plus aucun innerText / includes DOM
     for (const key of FILTER_KEYS) {
 
-      const group = [...document.querySelectorAll(".filter-group")]
-        .find(g => g.innerText.includes(key));
+      const group = document.querySelector(`.filter-group[data-key="${key}"]`);
+      if (!group) continue;
 
-      const active = group?.querySelectorAll(".active");
+      const active = group.querySelectorAll(".filter-btn.active");
 
-      if (!active || active.length === 0) continue;
+      if (active.length === 0) continue;
 
-      const val = (w.specs?.[key] || "").toLowerCase();
+      const weaponValue = (specs[key] || "").toLowerCase();
 
-      const ok = [...active].some(b =>
-        val.includes(b.textContent.split(" (")[0].toLowerCase())
+      const ok = [...active].some(btn =>
+        weaponValue.includes(btn.dataset.value)
       );
 
       if (!ok) return false;
     }
 
     // YEAR FILTER
-    const yearData = parseYearRange(w.specs?.["Years of Use"]);
+    const yearData = parseYearRange(specs["Years of Use"]);
 
     if (minYear !== -9999 || maxYear !== 9999) {
       if (!yearData) return false;
@@ -151,6 +155,7 @@ function startGame() {
 
 // ---------------- GAME
 function nextWeapon() {
+
   current = filteredWeapons[Math.floor(Math.random() * filteredWeapons.length)];
 
   document.getElementById("weapon-img").src = current.image;
@@ -162,6 +167,7 @@ function nextWeapon() {
 
 // ---------------- REVEAL
 function reveal() {
+
   if (!current) return;
 
   document.getElementById("title").innerText = current.name;
@@ -173,10 +179,11 @@ function reveal() {
   html += "</ul>";
 
   document.getElementById("info").innerHTML = html;
+
   window.revealed = true;
 }
 
-// ---------------- CLICK IMAGE
+// ---------------- INPUT
 document.getElementById("weapon-img")?.addEventListener("click", () => {
   if (!window.revealed) reveal();
   else nextWeapon();
@@ -197,9 +204,7 @@ document.getElementById("themeToggle")?.addEventListener("click", () => {
   html.setAttribute("data-theme", dark ? "light" : "dark");
 });
 
-
-// ---- Service
-
+// ---------------- SERVICE WORKER
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js")
     .then(() => console.log("✅ Service Worker registered"))
